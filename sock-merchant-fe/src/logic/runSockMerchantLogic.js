@@ -20,17 +20,16 @@ export async function runSockMerchantLogic(n, ar, userCode, language) {
   }
 }
 
-function runJavaScriptLogic(userCode, n, ar) {
+export function runJavaScriptLogic(userCode, n, ar) {
   try {
-    const fullCode = `
-      ${userCode}
-      return sockMerchant(${n}, [${ar.join(",")}]);
+    const wrappedCode = `
+    ${userCode}
+    return sockMerchant(${n}, [${ar.join(",")}]);
     `;
-    const fn = new Function(fullCode);
-    const result = fn();
-    return result;
-  } catch (err) {
-    return `Error executing JS code: ${err.message}`;
+    const fn = new Function(wrappedCode);
+    return fn();
+  } catch (error) {
+    throw new Error(`JS execution error: ${error.message}`);
   }
 }
 
